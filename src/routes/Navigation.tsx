@@ -25,7 +25,7 @@ export const Navigation = ()=> {
                     key={name} 
                     className={({ isActive }) => isActive ? 'nav-active' : '' }  
                     to={path} 
-                    end >
+                    >
                     {name}
                   </NavLink>
                 </li>

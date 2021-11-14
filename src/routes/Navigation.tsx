@@ -1,37 +1,52 @@
-import React from 'react';
+
+import { Suspense } from 'react';
 import {
   BrowserRouter as Router,
   Route,
-  Link,
   Routes,
-  NavLink
+  NavLink,
+  Navigate
 } from 'react-router-dom';
 import logo from '../logo.svg'
+import { routes } from './routes';
 
 export const Navigation = ()=> {
   return (
-    <Router>
-      <div className="name-layout">
+    <Suspense fallback={<span>Cargando...</span>}>
+      <Router>
+      <div className="main-layout">
         <nav>
             <img src={logo} alt="React-logo"/>
           <ul>
-            <li>
-              <NavLink className={({ isActive }) => isActive ? 'nav-active' : '' }  to="/" end>Home</NavLink>
-            </li>
-            <li>
-              <NavLink className={({ isActive }) => isActive ? 'nav-active' : '' }  to="/about" end>About</NavLink>
-            </li>
-            <li>
-              <NavLink className={({ isActive }) => isActive ? 'nav-active' : '' }  to="/users" end>Users</NavLink>
-            </li>
+            {
+              routes.map(({path,name})=>(
+                <li key={name}>
+                  <NavLink 
+                    key={name} 
+                    className={({ isActive }) => isActive ? 'nav-active' : '' }  
+                    to={path} 
+                    >
+                    {name}
+                  </NavLink>
+                </li>
+              ))
+            }
           </ul>
         </nav>
         <Routes>
-          <Route path="/about" element={<h1>About</h1>}/>
-          <Route path="/users" element={<h1>Users</h1>}/>
-          <Route path="/" element={<h1>Home</h1>}/>  
+          {
+            routes.map(({path,component: Component,name})=>(
+              <Route 
+                path={path} 
+                element={<Component/>}
+                key={name}
+              />
+            ))
+          }
+          <Route path='*' element={<Navigate replace to={routes[0].path} />} />
         </Routes>
       </div>
     </Router>
+    </Suspense>
   );
 }

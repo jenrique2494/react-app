@@ -1,38 +1,52 @@
-import React from 'react';
+
+import { Suspense } from 'react';
 import {
   BrowserRouter as Router,
   Route,
-  Link,
   Routes,
-  NavLink
+  NavLink,
+  Navigate
 } from 'react-router-dom';
 import logo from '../logo.svg'
-import { LazyPage1, LazyPage2, LazyPage3 } from '../01-lazyload/pages';
+import { routes } from './routes';
 
 export const Navigation = ()=> {
   return (
-    <Router>
+    <Suspense fallback={<span>Cargando...</span>}>
+      <Router>
       <div className="main-layout">
         <nav>
             <img src={logo} alt="React-logo"/>
           <ul>
-            <li>
-              <NavLink className={({ isActive }) => isActive ? 'nav-active' : '' }  to="/lazy1" end>Lazy1</NavLink>
-            </li>
-            <li>
-              <NavLink className={({ isActive }) => isActive ? 'nav-active' : '' }  to="/lazy2" end>Lazy2</NavLink>
-            </li>
-            <li>
-              <NavLink className={({ isActive }) => isActive ? 'nav-active' : '' }  to="/lazy3" end>Lazy3</NavLink>
-            </li>
+            {
+              routes.map(({path,name})=>(
+                <li key={name}>
+                  <NavLink 
+                    key={name} 
+                    className={({ isActive }) => isActive ? 'nav-active' : '' }  
+                    to={path} 
+                    end >
+                    {name}
+                  </NavLink>
+                </li>
+              ))
+            }
           </ul>
         </nav>
         <Routes>
-          <Route path="/lazy1" element={<LazyPage1/>}/>
-          <Route path="/lazy2" element={<LazyPage2/>}/>
-          <Route path="/lazy3" element={<LazyPage3/>}/>  
+          {
+            routes.map(({path,component: Component,name})=>(
+              <Route 
+                path={path} 
+                element={<Component/>}
+                key={name}
+              />
+            ))
+          }
+          <Route path='*' element={<Navigate replace to={routes[0].path} />} />
         </Routes>
       </div>
     </Router>
+    </Suspense>
   );
 }

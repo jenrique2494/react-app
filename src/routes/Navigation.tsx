@@ -43,7 +43,7 @@ export const Navigation = ()=> {
               />
             ))
           }
-          <Route path='*' element={<Navigate replace to={routes[0].path} />} />
+          <Route path='*' element={<Navigate replace to={routes[2].path} />} />
         </Routes>
       </div>
     </Router>

@@ -14,9 +14,7 @@ export const useProduct = ( {onChange, product, value=0,initialValues}:useProduc
 
     const isMounted = useRef(false);
 
-    console.log(initialValues?.count)
-
-    const isControlled = useRef(!!onChange)
+    // const isControlled = useRef(!!onChange)
     const increaseBy=(value:number)=>{
         
             let newValue=Math.max(counter+value,0);
